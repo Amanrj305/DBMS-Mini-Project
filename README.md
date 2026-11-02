@@ -13,7 +13,7 @@
 
 ---
 
-## 👥 Team Members
+##  Team Members
 
 | Name | SRN | GitHub | Core Responsibilities |
 | :--- | :--- | :--- | :--- |
@@ -22,7 +22,7 @@
 
 ---
 
-## 📌 Problem Statement
+##  Problem Statement
 
 Financial markets generate massive volumes of structured time-series data (prices, trading volumes, volatility metrics) alongside unstructured textual data (financial news, macroeconomic disclosures, corporate earnings). Traditional market monitoring dashboards focus exclusively on displaying historical quotes without providing integrated tools to detect anomalous market behaviour in real time or investigate correlated historical events.
 
@@ -30,7 +30,7 @@ Our system addresses this challenge by combining a normalized **PostgreSQL 17** 
 
 ---
 
-## 🏛️ System Architecture & Database Design
+##  System Architecture & Database Design
 
 The relational schema is normalized into **18 tables** divided into four functional domains:
 
@@ -64,7 +64,7 @@ The relational schema is normalized into **18 tables** divided into four functio
 
 ---
 
-## ⚡ Advanced Database Concepts Demonstrated
+##  Advanced Database Concepts Demonstrated
 
 Per the PES University Level 3 requirements, the project demonstrates at least 4 advanced concepts:
 
@@ -84,7 +84,7 @@ Per the PES University Level 3 requirements, the project demonstrates at least 4
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 - **Relational & Vector DBMS:** PostgreSQL 17.11 with `pgvector` v0.8.6
 - **Web Frontend:** Next.js (App Router), TypeScript, Tailwind CSS
@@ -95,7 +95,7 @@ Per the PES University Level 3 requirements, the project demonstrates at least 4
 
 ---
 
-## 🚀 Setup & Execution Guide
+##  Setup & Execution Guide
 
 ### 1. Database Setup (PostgreSQL 17 + pgvector)
 Ensure PostgreSQL 17 and pgvector are installed, then create the database and apply the DDL:
