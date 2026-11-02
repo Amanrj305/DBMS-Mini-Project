@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DBMS Level 3 Project - Financial Market Anomaly &amp; Crash Detection System</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm 10mm 10mm 10mm;
+      @bottom-center {
+        content: "Page " counter(page) " of " counter(pages);
+        font-size: 7.5pt;
+        color: #64748b;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      line-height: 1.35;
+      font-size: 8.2pt;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    h1, h2, h3, h4 {
+      color: #0f172a;
+      margin-top: 0;
+      font-weight: 700;
+    }
+    h1 {
+      font-size: 15pt;
+      line-height: 1.15;
+      margin-bottom: 2px;
+    }
+    h2 {
+      font-size: 10.2pt;
+      border-bottom: 1.5px solid #cbd5e1;
+      padding-bottom: 2px;
+      margin-top: 8px;
+      margin-bottom: 5px;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    h3 {
+      font-size: 8.8pt;
+      margin-top: 5px;
+      margin-bottom: 2px;
+      color: #1e40af;
+    }
+    p {
+      margin: 0 0 4px 0;
+    }
+    .header-box {
+      border: 1.5px solid #2563eb;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+      padding: 8px 12px;
+      margin-bottom: 6px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 1.5px 6px;
+      border-radius: 9999px;
+      font-size: 6.8pt;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .badge-blue { background-color: #dbeafe; color: #1e40af; }
+    .badge-purple { background-color: #f3e8ff; color: #6b21a8; }
+    .badge-green { background-color: #dcfce7; color: #166534; }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .member-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 6px 8px;
+    }
+    .member-title {
+      font-weight: 700;
+      font-size: 8.8pt;
+      color: #0f172a;
+    }
+    .member-sub {
+      font-size: 7.6pt;
+      color: #475569;
+      margin-bottom: 3px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 7.8pt;
+      margin: 4px 0 6px 0;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 3.5px 5.5px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 7.8pt;
+    }
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    .code-tree {
+      background-color: #0f172a;
+      color: #f1f5f9;
+      font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+      font-size: 6.6pt;
+      line-height: 1.25;
+      padding: 6px 10px;
+      border-radius: 5px;
+      white-space: pre;
+      margin: 4px 0 6px 0;
+      border: 1px solid #334155;
+    }
+
+    .commit-card {
+      border: 1px solid #cbd5e1;
+      border-left: 3.5px solid #2563eb;
+      background-color: #ffffff;
+      border-radius: 4px;
+      padding: 3px 6px;
+      margin-bottom: 3.5px;
+      page-break-inside: avoid;
+    }
+    .commit-card.aman {
+      border-left-color: #2563eb;
+    }
+    .commit-card.amrit {
+      border-left-color: #7c3aed;
+    }
+    .commit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5px;
+    }
+    .commit-title {
+      font-family: Consolas, monospace;
+      font-size: 7.2pt;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .commit-meta {
+      font-size: 6.8pt;
+      color: #64748b;
+    }
+    .commit-desc {
+      font-size: 7pt;
+      color: #334155;
+      line-height: 1.25;
+    }
+    .commit-files {
+      font-family: Consolas, monospace;
+      font-size: 6.4pt;
+      color: #334155;
+      background: #f1f5f9;
+      padding: 1px 3px;
+      border-radius: 2px;
+      display: inline-block;
+      margin-top: 1px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+    .no-break {
+      page-break-inside: avoid;
+    }
+
+    ul {
+      margin: 2px 0 4px 0;
+      padding-left: 14px;
+    }
+    li {
+      margin-bottom: 1.5px;
+    }
+    .highlight {
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .tag {
+      font-family: Consolas, monospace;
+      font-size: 7pt;
+      background: #e2e8f0;
+      color: #0f172a;
+      padding: 0.5px 3px;
+      border-radius: 2.5px;
+    }
+    .footer-note {
+      font-size: 7.2pt;
+      color: #64748b;
+      text-align: center;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== PAGE 1 ==================== -->
+  <div class="header-box">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <div>
+        <span class="badge badge-blue">PES UNIVERSITY • CSE SEM 5 DBMS LEVEL 3 PROJECT</span>
+        <h1 style="margin-top: 3px;">Financial Market Anomaly &amp; Crash Detection System</h1>
+        <p style="margin: 0; font-size: 8pt; color: #334155;">
+          <strong>Project Architecture, Equal Work Division Matrix &amp; Git Development Roadmap</strong>
+        </p>
+      </div>
+      <div style="text-align: right; font-size: 7.2pt; color: #475569;">
+        <div><strong>Course:</strong> DBMS Experiential Learning</div>
+        <div><strong>Faculty Guide:</strong> Dr. Nagasundari S</div>
+        <div><strong>Section:</strong> A | <strong>Team Size:</strong> 2 Members</div>
+        <div><strong>Stack:</strong> PostgreSQL 17 + pgvector + Next.js</div>
+      </div>
+    </div>
+
+    <div class="team-grid">
+      <div class="member-card">
+        <div class="member-title">Member 1: Amrit Raj Anmol</div>
+        <div class="member-sub">SRN: <strong>PES2UG24CS056</strong> | Section A</div>
+        <div style="font-size: 7.3pt; color: #334155;">
+          <strong>Completed:</strong> 18-Table Relational DDL &amp; HNSW Indexes.<br>
+          <strong>Focus:</strong> Semantic Vector Search (pgvector HNSW), Watchlists &amp; User Preference System, Automated Alert Triggers, Role-based Auth (JWT).
+        </div>
+      </div>
+      <div class="member-card">
+        <div class="member-title">Member 2: Aman Raj</div>
+        <div class="member-sub">SRN: <strong>PES2UG24CS053</strong> | Section A</div>
+        <div style="font-size: 7.3pt; color: #334155;">
+          <strong>Current Step:</strong> Implementation Roadmap &amp; Work Division.<br>
+          <strong>Focus:</strong> Market OHLCV Ingestion Pipeline, Stored Procedure Anomaly Engine, Analytical Views, Next.js Dashboard &amp; Charts UI.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>1. Executive Summary &amp; Syllabus Alignment</h2>
+  <p>
+    <strong>Problem Statement:</strong> Financial markets generate vast amounts of structured price/volume series alongside unstructured news streams. Conventional dashboards only display raw prices without correlating sudden price collapses, volatility spikes, and news sentiment. This system detects equity anomalies in real time, correlates them with historical market events, and enables semantic search over financial news using vector embeddings.
+  </p>
+  <p>
+    <strong>Level 3 Rubric Compliance:</strong> Per syllabus guidelines, <em>"Projects should be completed as 2 member teams. Each team member must have clearly defined responsibilities and contribute to both database and application development. The project should go beyond basic CRUD."</em> Both members have an exact 50% split across database logic, Next.js routes, UI components, and evaluation requirements.
+  </p>
+
+  <h2>2. 50/50 Equal Work Division Matrix</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 17%;">Project Layer</th>
+        <th style="width: 41.5%;">Aman Raj (PES2UG24CS053)</th>
+        <th style="width: 41.5%;">Amrit Raj Anmol (PES2UG24CS056)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Data Pipeline &amp; Synthetics</strong></td>
+        <td>
+          • <span class="tag">scripts/seed_market_data.py</span><br>
+          Generates 8 sectors, 20 stocks (NASDAQ/NSE), 12 months of daily OHLCV prices, and injects synthetic crash/spike scenarios.
+        </td>
+        <td>
+          • <span class="tag">scripts/seed_news_embeddings.py</span><br>
+          Scrapes/generates 50+ financial news headlines, computes 384-d dense embeddings via <span class="tag">all-MiniLM-L6-v2</span>, and links to events.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Database Logic (Advanced SQL)</strong></td>
+        <td>
+          • <strong>Stored Procedure:</strong> <span class="tag">sp_detect_market_anomalies</span> (Window functions: rolling 20-day Z-score &amp; volume surge).<br>
+          • <strong>Views:</strong> <span class="tag">vw_stock_daily_stats</span> &amp; <span class="tag">vw_market_overview</span>.<br>
+          • <strong>Complex DML:</strong> Multi-table JOINs, GROUP BY, HAVING, Subqueries &amp; ACID transactions with ROLLBACK safety.
+        </td>
+        <td>
+          • <strong>Already Executed:</strong> 18-table DDL, constraints, B-Tree and HNSW vector cosine indexing (<span class="tag">embedding vector_cosine_ops</span>).<br>
+          • <strong>Stored Function:</strong> <span class="tag">fn_match_news_semantic</span> (Cosine distance <span class="tag">&lt;=&gt;</span> with dynamic threshold).<br>
+          • <strong>Trigger:</strong> <span class="tag">trg_on_anomaly_create_alert</span> (Auto-alerts watched stocks on anomaly insertion).
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Backend APIs (Next.js Routes)</strong></td>
+        <td>
+          • Database connection pool (<span class="tag">lib/db.ts</span>).<br>
+          • <span class="tag">/api/stocks</span> &amp; <span class="tag">/api/stocks/[ticker]</span> (Candlestick data).<br>
+          • <span class="tag">/api/anomalies</span> (Query anomalies, execute detection).<br>
+          • <span class="tag">/api/analytics/summary</span> (Market breadth &amp; turnover).
+        </td>
+        <td>
+          • Auth session &amp; password hashing (<span class="tag">lib/auth.ts</span>).<br>
+          • <span class="tag">/api/auth/[login|register|me]</span> (RBAC: Admin / Analyst).<br>
+          • <span class="tag">/api/semantic-search</span> (Text-to-vector query engine).<br>
+          • <span class="tag">/api/watchlist</span> &amp; <span class="tag">/api/alerts</span> (Full CRUD).
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Frontend Interface (Next.js)</strong></td>
+        <td>
+          • Executive Market Dashboard (<span class="tag">app/page.tsx</span>).<br>
+          • Interactive Stock Charts with anomaly event markers (<span class="tag">StockChart.tsx</span> using Recharts).<br>
+          • Anomaly Audit Explorer with severity filters &amp; indicator breakdown modal (<span class="tag">AnomalyTable.tsx</span>).
+        </td>
+        <td>
+          • Global Navigation Bar &amp; Alert Bell (<span class="tag">AlertDropdown.tsx</span>).<br>
+          • Semantic Vector Search page with similarity confidence cards (<span class="tag">app/semantic-search/page.tsx</span>).<br>
+          • Watchlist Manager UI (<span class="tag">app/watchlist/page.tsx</span>).<br>
+          • Authentication pages (Login / Register).
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Documentation &amp; Viva Defense</strong></td>
+        <td>
+          • <span class="tag">docs/DATA_DICTIONARY.md</span><br>
+          • <span class="tag">docs/SYSTEM_ARCHITECTURE.md</span><br>
+          • Defense: Statistical Anomaly Math &amp; Window Functions.
+        </td>
+        <td>
+          • <span class="tag">README.md</span> (Step-by-step reproduction guide)<br>
+          • <span class="tag">docs/ADVANCED_DATABASE_FEATURES.md</span><br>
+          • Defense: pgvector HNSW Indexing &amp; Event Triggers.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ==================== PAGE 2 ==================== -->
+  <div class="page-break"></div>
+
+  <h2>3. Complete Project Architecture &amp; File Structure</h2>
+  <div class="code-tree">DBMS-Mini-Project/
+├── .env.example                               # Sample DB credentials (HOST, PORT, USER, PWD, JWT_SECRET)
+├── .gitignore                                 # Ignore node_modules, .env.local, .next, __pycache__
+├── README.md                                  # Setup & Execution Documentation [Amrit]
+├── package.json                               # Next.js 14/15, Tailwind, Recharts, pg, bcryptjs, jose
+├── database/
+│   ├── ddl/
+│   │   └── financial_market_schema.sql        # 18-Table DDL & HNSW Indexes [Amrit - Done]
+│   └── advanced/
+│       ├── 01_procedures_functions.sql        # sp_detect_market_anomalies [Aman] & fn_match_news_semantic [Amrit]
+│       ├── 02_triggers.sql                    # trg_on_anomaly_create_alert trigger [Amrit]
+│       ├── 03_views.sql                       # vw_stock_daily_stats & vw_market_overview [Aman]
+│       └── 04_evaluation_queries.sql          # Grading queries: Group By, Having, Subqueries, ACID TX [Aman]
+├── scripts/
+│   ├── requirements.txt                       # psycopg2-binary, sentence-transformers, pandas, numpy
+│   ├── seed_market_data.py                    # Synthetic OHLCV & crash data generator [Aman]
+│   └── seed_news_embeddings.py                # News corpus & 384d vector embedding generator [Amrit]
+├── src/
+│   ├── lib/
+│   │   ├── db.ts                              # PostgreSQL connection pool using pg [Aman]
+│   │   ├── auth.ts                            # Password hashing & JWT verification [Amrit]
+│   │   └── embeddings.ts                      # MiniLM embedding pipeline helper [Amrit]
+│   ├── app/
+│   │   ├── layout.tsx & globals.css           # Global layout & styling [Shared]
+│   │   ├── page.tsx                           # Main Market Analytics Dashboard [Aman]
+│   │   ├── login/page.tsx & register/page.tsx # Authentication pages [Amrit]
+│   │   ├── stocks/[ticker]/page.tsx           # Stock OHLCV chart & metrics [Aman]
+│   │   ├── anomalies/page.tsx                 # Anomaly audit table & filters [Aman]
+│   │   ├── semantic-search/page.tsx           # pgvector semantic search page [Amrit]
+│   │   ├── watchlist/page.tsx                 # User watchlist & alert rules [Amrit]
+│   │   └── api/
+│   │       ├── auth/[login|register|me]/      # Auth API endpoints [Amrit]
+│   │       ├── stocks/ & stocks/[ticker]/     # Market data endpoints [Aman]
+│   │       ├── anomalies/ & anomalies/[id]/   # Anomaly query & execution endpoints [Aman]
+│   │       ├── semantic-search/               # Vector query endpoint [Amrit]
+│   │       ├── watchlist/ & alerts/           # Watchlist and Alert CRUD endpoints [Amrit]
+│   └── components/
+│       ├── Navbar.tsx & AlertDropdown.tsx     # Navigation & notification popup [Amrit]
+│       ├── MarketOverviewCard.tsx             # Sector performance & anomaly counters [Aman]
+│       ├── StockChart.tsx                     # Interactive Candlestick / Line chart [Aman]
+│       ├── AnomalyTable.tsx                   # Anomaly logs with severity badges [Aman]
+│       ├── SemanticSearchBox.tsx              # Vector search input & score cards [Amrit]
+│       └── WatchlistManager.tsx               # Watchlist stock manager [Amrit]
+└── docs/
+    ├── DATA_DICTIONARY.md                     # Schema tables, columns & constraints description [Aman]
+    ├── SYSTEM_ARCHITECTURE.md                 # System data flow & ER diagram references [Aman]
+    └── ADVANCED_DATABASE_FEATURES.md          # Technical explanation of 5 advanced DB concepts [Amrit]</div>
+
+  <h2>4. Detailed Technical Specifications of Key Programs</h2>
+
+  <div class="no-break">
+    <h3>A. Market Data Pipeline &amp; Anomaly Engine (Aman Raj - PES2UG24CS053)</h3>
+    <ul>
+      <li><span class="highlight"><code>scripts/seed_market_data.py</code>:</span> Populates reference tables (<code>sector</code>, <code>company</code>, <code>exchange</code>, <code>stock</code>, <code>trading_day</code>). Generates 1 year of daily OHLCV records for 20 equities. Injects synthetic anomalies: <em>flash crashes</em> (sharp 8–15% drops on 4x average volume), <em>speculative spikes</em>, and <em>volatility divergence</em>.</li>
+      <li><span class="highlight"><code>database/advanced/01_procedures_functions.sql</code> (Anomaly SP):</span>
+        Defines <code>sp_detect_market_anomalies(p_trade_date DATE, p_std_dev_threshold NUMERIC)</code>. Uses PostgreSQL analytical window functions:
+        <code>AVG(close_price) OVER (PARTITION BY stock_id ORDER BY trade_date ROWS BETWEEN 20 PRECEDING AND 1 PRECEDING)</code>.
+        Computes rolling Z-scores for price and volume; if deviations surpass the threshold, inserts rows into <code>anomaly</code> and records indicator metrics into <code>anomaly_indicator_value</code>.
+      </li>
+      <li><span class="highlight"><code>database/advanced/03_views.sql</code>:</span> <code>vw_stock_daily_stats</code> (calculates 20-day SMA, daily return %, intraday spread) and <code>vw_market_overview</code> (sector-level market capitalization turnover and open anomaly counts).</li>
+      <li><span class="highlight"><code>database/advanced/04_evaluation_queries.sql</code>:</span> Fully satisfies Level 3 evaluation queries:
+        JOINs across 4 tables, GROUP BY sector with HAVING clause filtering for average anomaly scores, correlated subqueries identifying decoupling stocks, and ACID transaction blocks with ROLLBACK safety.
+      </li>
+    </ul>
+  </div>
+
+  <div class="no-break">
+    <h3>B. Semantic Vector Search, Triggers &amp; Auth (Amrit Raj Anmol - PES2UG24CS056)</h3>
+    <ul>
+      <li><span class="highlight"><code>scripts/seed_news_embeddings.py</code>:</span> Seeds realistic market articles (macro rate hikes, bank run liquidity scares, tech earnings beats). Encodes text into <strong>384-dimensional dense vectors</strong> using the pretrained <code>all-MiniLM-L6-v2</code> model. Stores vectors in <code>news_article.embedding</code> and links articles to <code>market_event</code>.</li>
+      <li><span class="highlight"><code>database/advanced/01_procedures_functions.sql</code> (Vector SP):</span>
+        Defines <code>fn_match_news_semantic(p_query_vector VECTOR(384), p_threshold NUMERIC, p_limit INT)</code>.
+        Leverages the <strong>HNSW cosine index (<code>embedding vector_cosine_ops</code>)</strong> using the cosine distance operator <code>news_article.embedding &lt;=&gt; p_query_vector</code> to perform sub-millisecond similarity matching.
+      </li>
+      <li><span class="highlight"><code>database/advanced/02_triggers.sql</code>:</span>
+        Defines <code>trg_on_anomaly_create_alert</code> (an <code>AFTER INSERT ON anomaly</code> trigger). Whenever an anomaly is logged, it scans <code>watchlist_item</code> for users monitoring that stock and automatically creates personalized unread entries in <code>alert</code>.
+      </li>
+      <li><span class="highlight"><code>src/lib/auth.ts</code> &amp; API:</span> Implements secure password hashing with <code>bcryptjs</code>, generates signed JWT session tokens, and enforces role-based access control (differentiating <code>Admin</code> vs. <code>Analyst</code>).
+      </li>
+    </ul>
+  </div>
+
+  <!-- ==================== PAGE 3 ==================== -->
+  <div class="page-break"></div>
+
+  <h2>5. Step-by-Step GitHub Commit Roadmap (Part 1: Commits 1 to 14)</h2>
+  <p style="font-size: 7.5pt; color: #475569; margin-bottom: 5px;">
+    The commit sequence below guarantees balanced, parallel collaboration. Alternate commits between both authors as outlined.
+  </p>
+
+  <h3 style="color: #475569; border-bottom: 1px dashed #cbd5e1; padding-bottom: 1px; margin-top: 2px;">Sprint 0 &amp; 1: Database Foundation &amp; Advanced Database Logic</h3>
+
+  <div class="commit-card amrit">
+    <div class="commit-header">
+      <span class="commit-title">Commit 1: feat(db): initialize database schema and ddl for financial market system</span>
+      <span class="commit-meta"><span class="badge badge-purple">Amrit Raj Anmol</span> • Baseline</span>
+    </div>
+    <div class="commit-desc">Creates 18 normalized tables with foreign keys, checks, B-tree indexes, and pgvector HNSW cosine index.</div>
+    <div class="commit-files">database/ddl/financial_market_schema.sql, .gitignore</div>
+  </div>
+
+  <div class="commit-card aman">
+    <div class="commit-header">
+      <span class="commit-title">Commit 2: feat(data): implement market data generator and synthetic crash seeder</span>
+      <span class="commit-meta"><span class="badge badge-blue">Aman Raj</span> • Sprint 1</span>
+    </div>
+    <div class="commit-desc">Python script populating sectors, companies, stocks, and 12-month OHLCV data with injected crash anomalies.</div>
+    <div class="commit-files">scripts/requirements.txt, scripts/seed_market_data.py</div>
+  </div>
+
+  <div class="commit-card amrit">
+    <div class="commit-header">
+      <span class="commit-title">Commit 3: feat(vector): add news embeddings generator using 384d sentence-transformers</span>
+      <span class="commit-meta"><span class="badge badge-purple">Amrit Raj Anmol</span> • Sprint 1</span>
+    </div>
+    <div class="commit-desc">Generates financial news headlines, computes 384-d vectors via MiniLM-L6-v2, and populates news_article and event_news.</div>
+    <div class="commit-files">scripts/seed_news_embeddings.py</div>
+  </div>
+
+  <div class="commit-card aman">
+    <div class="commit-header">
+      <span class="commit-title">Commit 4: feat(db): add market overview views and analytical rollups</span>
+      <span class="commit-meta"><span class="badge badge-blue">Aman Raj</span> • Sprint 1</span>
+    </div>
+    <div class="commit-desc">Creates SQL views vw_stock_daily_stats (SMA &amp; returns) and vw_market_overview (sector-level aggregation).</div>
+    <div class="commit-files">database/advanced/03_views.sql</div>
+  </div>
+
+  <div class="commit-card amrit">
+    <div class="commit-header">
+      <span class="commit-title">Commit 5: feat(db): implement automated alert trigger for detected anomalies</span>
+      <span class="commit-meta"><span class="badge badge-purple">Amrit Raj Anmol</span> • Sprint 1</span>
+    </div>
+    <div class="commit-desc">Adds PostgreSQL AFTER INSERT trigger on anomaly table to generate user alerts for watched stocks.</div>
+    <div class="commit-files">database/advanced/02_triggers.sql</div>
+  </div>
+
+  <div class="commit-card aman">
+    <div class="commit-header">
+      <span class="commit-title">Commit 6: feat(db): implement stored procedure for multi-indicator anomaly detection</span>
+      <span class="commit-meta"><span class="badge badge-blue">Aman Raj</span> • Sprint 1</span>
+    </div>
+    <div class="commit-desc">Defines sp_detect_market_anomalies using rolling standard deviation and volume surge thresholds.</div>
+    <div class="commit-files">database/advanced/01_procedures_functions.sql</div>
+  </div>
+
+  <div class="commit-card amrit">
+    <div class="commit-header">
+      <span class="commit-title">Commit 7: feat(db): add semantic vector similarity search stored function</span>
+      <span class="commit-meta"><span class="badge badge-purple">Amrit Raj Anmol</span> • Sprint 1</span>
+    </div>
+    <div class="commit-desc">Defines fn_match_news_semantic utilizing HNSW cosine distance operator (&lt;=&gt;) against news_article.</div>
+    <div class="commit-files">database/advanced/01_procedures_functions.sql</div>
+  </div>
+
+  <div class="commit-card aman">
+    <div class="commit-header">
+      <span class="commit-title">Commit 8: docs(db): add rubric evaluation queries covering joins, aggregates, and acid transactions</span>
+      <span class="commit-meta"><span class="badge badge-blue">Aman Raj</span> • Sprint 1</span>
+    </div>
+    <div class="commit-desc">Prepares SQL test scripts demonstrating GROUP BY, HAVING, subqueries, and multi-table ACID transaction blocks.</div>
+    <div class="commit-files">database/advanced/04_evaluation_queries.sql</div>
+  </div>
+
+  <h3 style="color: #475569; border-bottom: 1px dashed #cbd5e1; padding-bottom: 1px; margin-top: 5px;">Sprint 2: Next.js Setup, Connection Pooling &amp; Backend API Routes</h3>
+
+  <div class="commit-card aman">
+    <div class="commit-header">
+      <span class="commit-title">Commit 9: chore(app): setup Next.js project structure, tailwindcss, and postgres client pool</span>
+      <span class="commit-meta"><span class="badge badge-blue">Aman Raj</span> • Sprint 2</span>
+    </div>
+    <div class="commit-desc">Initializes Next.js app, configures Tailwind CSS, environment variables, and creates pg.Pool connection module.</div>
+    <div class="commit-files">package.json, tsconfig.json, tailwind.config.ts, src/lib/db.ts, .env.example</div>
+  </div>
+
+  <div class="commit-card amrit">
+    <div class="commit-header">
+      <span class="commit-title">Commit 10: feat(auth): implement password hashing, jwt auth helpers and auth api routes</span>
+      <span class="commit-meta"><span class="badge badge-purple">Amrit Raj Anmol</span> • Sprint 2</span>
+    </div>
+    <div class="commit-desc">Adds bcrypt password encryption, JWT generation, and endpoints for user login, registration, and session info.</div>
+    <div class="commit-files">src/lib/auth.ts, src/app/api/auth/login/route.ts, src/app/api/auth/register/route.ts</div>
+  </div>
+
+  <div class="commit-card aman">
+    <div class="commit-header">
+      <span class="commit-title">Commit 11: feat(api): create stocks and historical ohlcv data endpoints</span>
+      <span class="commit-meta"><span class="badge badge-blue">Aman Raj</span> • Sprint 2</span>
+    </div>
+    <div class="commit-desc">Builds /api/stocks list route and /api/stocks/[ticker] endpoint returning candlestick history and company profile.</div>
+    <div class="commit-files">src/app/api/stocks/route.ts, src/app/api/stocks/[ticker]/route.ts</div>
+  </div>
+
+  <div class="commit-card amrit">
+    <div class="commit-header">
+      <span class="commit-title">Commit 12: feat(api): implement semantic news search and watchlist crud endpoints</span>
+      <span class="commit-meta"><span class="badge badge-purple">Amrit Raj Anmol</span> • Sprint 2</span>
+    </div>
+    <div class="commit-desc">Builds /api/semantic-search connecting text query to vector search, and /api/watchlist management endpoints.</div>
+    <div class="commit-files">src/lib/embeddings.ts, src/app/api/semantic-search/route.ts, src/app/api/watchlist/route.ts</div>
+  </div>
+
+  <div class="commit-card aman">
+    <div class="commit-header">
+      <span class="commit-title">Commit 13: feat(api): add anomaly querying and trigger execution route handlers</span>
+      <span class="commit-meta"><span class="badge badge-blue">Aman Raj</span> • Sprint 2</span>
+    </div>
+    <div class="commit-desc">Builds /api/anomalies endpoint for filtered anomaly logs and manual invocation of sp_detect_market_anomalies.</div>
+    <div class="commit-files">src/app/api/anomalies/route.ts, src/app/api/anomalies/[id]/route.ts</div>
+  </div>
+
+  <div class="commit-card amrit">
+    <div class="commit-header">
+      <span class="commit-title">Commit 14: feat(api): implement user alert retrieval and read-status toggle endpoints</span>
+      <span class="commit-meta"><span class="badge badge-purple">Amrit Raj Anmol</span> • Sprint 2</span>
+    </div>
+    <div class="commit-desc">Creates /api/alerts route to fetch unread anomaly notifications and PATCH route to update read status.</div>
+    <div class="commit-files">src/app/api/alerts/route.ts</div>
+  </div>
+
+  <!-- ==================== PAGE 4 ==================== -->
+  <div class="page-break"></div>
+
+  <h2>5. Step-by-Step GitHub Commit Roadmap (Part 2: Commits 15 to 24)</h2>
+
+  <h3 style="color: #475569; border-bottom: 1px dashed #cbd5e1; padding-bottom: 1px; margin-top: 2px;">Sprint 3: Next.js Frontend Dashboards &amp; Visualizations</h3>
+
+  <div class="commit-card amrit">
+    <div class="commit-header">
+      <span class="commit-title">Commit 15: feat(ui): build global navigation bar, auth modals, and notification bell</span>
+      <span class="commit-meta"><span class="badge badge-purple">Amrit Raj Anmol</span> • Sprint 3</span>
+    </div>
+    <div class="commit-desc">Creates responsive header navbar, user profile badge, unread alert counter bell, and login/register UI.</div>
+    <div class="commit-files">src/components/Navbar.tsx, src/components/AlertDropdown.tsx, src/app/login/page.tsx</div>
+  </div>
+
+  <div class="commit-card aman">
+    <div class="commit-header">
+      <span class="commit-title">Commit 16: feat(ui): develop market overview dashboard with sector metrics and summary cards</span>
+      <span class="commit-meta"><span class="badge badge-blue">Aman Raj</span> • Sprint 3</span>
+    </div>
+    <div class="commit-desc">Main landing page showcasing market breadth, active anomalies counter, top movers, and sector turnover cards.</div>
+    <div class="commit-files">src/app/page.tsx, src/components/MarketOverviewCard.tsx</div>
+  </div>
+
+  <div class="commit-card aman">
+    <div class="commit-header">
+      <span class="commit-title">Commit 17: feat(ui): add interactive stock candlestick/line chart and anomaly flag overlay</span>
+      <span class="commit-meta"><span class="badge badge-blue">Aman Raj</span> • Sprint 3</span>
+    </div>
+    <div class="commit-desc">Builds Recharts time-series chart with zoom/filter and visual flags highlighting days with detected anomalies.</div>
+    <div class="commit-files">src/components/StockChart.tsx, src/app/stocks/[ticker]/page.tsx</div>
+  </div>
+
+  <div class="commit-card amrit">
+    <div class="commit-header">
+      <span class="commit-title">Commit 18: feat(ui): create semantic news search interface with similarity score cards</span>
+      <span class="commit-meta"><span class="badge badge-purple">Amrit Raj Anmol</span> • Sprint 3</span>
+    </div>
+    <div class="commit-desc">UI allowing natural language news search, displaying cosine similarity percentages and linked crash events.</div>
+    <div class="commit-files">src/app/semantic-search/page.tsx, src/components/SemanticSearchBox.tsx</div>
+  </div>
+
+  <div class="commit-card aman">
+    <div class="commit-header">
+      <span class="commit-title">Commit 19: feat(ui): create anomaly explorer table with severity filtering and indicator details</span>
+      <span class="commit-meta"><span class="badge badge-blue">Aman Raj</span> • Sprint 3</span>
+    </div>
+    <div class="commit-desc">Interactive anomaly table with multi-column sorting, severity badge filters, and modal revealing Z-score deviations.</div>
+    <div class="commit-files">src/app/anomalies/page.tsx, src/components/AnomalyTable.tsx</div>
+  </div>
+
+  <div class="commit-card amrit">
+    <div class="commit-header">
+      <span class="commit-title">Commit 20: feat(ui): build user watchlist management page and preference settings</span>
+      <span class="commit-meta"><span class="badge badge-purple">Amrit Raj Anmol</span> • Sprint 3</span>
+    </div>
+    <div class="commit-desc">Allows users to add/remove stocks from personal watchlists and configure anomaly alert sensitivity thresholds.</div>
+    <div class="commit-files">src/app/watchlist/page.tsx, src/components/WatchlistManager.tsx</div>
+  </div>
+
+  <h3 style="color: #475569; border-bottom: 1px dashed #cbd5e1; padding-bottom: 1px; margin-top: 5px;">Sprint 4: Verification, Evaluation Queries &amp; Documentation</h3>
+
+  <div class="commit-card aman">
+    <div class="commit-header">
+      <span class="commit-title">Commit 21: docs: generate comprehensive system architecture and data dictionary</span>
+      <span class="commit-meta"><span class="badge badge-blue">Aman Raj</span> • Sprint 4</span>
+    </div>
+    <div class="commit-desc">Documents 18 tables, column data types, business constraints, and system data-flow diagrams.</div>
+    <div class="commit-files">docs/SYSTEM_ARCHITECTURE.md, docs/DATA_DICTIONARY.md</div>
+  </div>
+
+  <div class="commit-card amrit">
+    <div class="commit-header">
+      <span class="commit-title">Commit 22: docs: write project setup guide, vector db justification, and testing walkthrough</span>
+      <span class="commit-meta"><span class="badge badge-purple">Amrit Raj Anmol</span> • Sprint 4</span>
+    </div>
+    <div class="commit-desc">Documents local setup instructions, pgvector technical rationale, and step-by-step reproduction guide.</div>
+    <div class="commit-files">README.md, docs/ADVANCED_DATABASE_FEATURES.md</div>
+  </div>
+
+  <div class="commit-card aman">
+    <div class="commit-header">
+      <span class="commit-title">Commit 23: test: verify end-to-end anomaly detection pipeline and fix edge-case queries</span>
+      <span class="commit-meta"><span class="badge badge-blue">Aman Raj</span> • Sprint 4</span>
+    </div>
+    <div class="commit-desc">End-to-end validation of market data generation, stored procedure execution, and query execution times.</div>
+    <div class="commit-files">database/advanced/04_evaluation_queries.sql, src/lib/db.ts</div>
+  </div>
+
+  <div class="commit-card amrit">
+    <div class="commit-header">
+      <span class="commit-title">Commit 24: test: validate vector cosine distance search accuracy and alert trigger responses</span>
+      <span class="commit-meta"><span class="badge badge-purple">Amrit Raj Anmol</span> • Sprint 4</span>
+    </div>
+    <div class="commit-desc">Verifies HNSW index latency (&lt;10ms), validates trigger event propagation to user alerts, and polishes UI.</div>
+    <div class="commit-files">src/app/api/semantic-search/route.ts, README.md</div>
+  </div>
+
+  <!-- ==================== PAGE 5 ==================== -->
+  <div class="page-break"></div>
+
+  <h2>6. Viva / Evaluation Checklist (How to Defend Your Work)</h2>
+  <p style="font-size: 7.5pt; color: #475569; margin-bottom: 5px;">
+    Use this guide during the final project viva to demonstrate clear individual ownership of database and application components.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 24%;">Evaluation Area</th>
+        <th style="width: 38%;">Aman Raj (PES2UG24CS053) Explains</th>
+        <th style="width: 38%;">Amrit Raj Anmol (PES2UG24CS056) Explains</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Relational Modeling &amp; Constraints</strong></td>
+        <td>
+          • Foreign keys and composite PK on <span class="tag">trading_day(exchange_id, trade_date)</span>.<br>
+          • Multi-column CHECK constraints ensuring non-negative prices, volumes, and <span class="tag">high &gt;= low</span>.<br>
+          • Unique constraint on <span class="tag">(stock_id, trade_date)</span> preventing duplicate market quotes.
+        </td>
+        <td>
+          • 18-table normalized database architecture across 4 distinct functional sub-domains.<br>
+          • CASCADE delete behaviors on user watchlists, watchlist items, and alerts.<br>
+          • Unique constraints on ISIN numbers and exchange-ticker combinations.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Vector DB &amp; Semantic Search</strong></td>
+        <td>
+          • Integration of vector search results into equity crash timelines.<br>
+          • Correlating price drop timestamps with detected news article publication dates.
+        </td>
+        <td>
+          • Justification for selecting <span class="tag">pgvector</span> over external vector DBs (zero dual-database sync overhead).<br>
+          • Dense 384-dimensional vector embeddings generated via MiniLM.<br>
+          • HNSW indexing structure using cosine distance (<span class="tag">vector_cosine_ops</span>).
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Advanced DB Concepts (Min. 4)</strong></td>
+        <td>
+          • <strong>Stored Procedure:</strong> <span class="tag">sp_detect_market_anomalies</span> calculating multi-day rolling Z-scores.<br>
+          • <strong>Views:</strong> <span class="tag">vw_stock_daily_stats</span> and <span class="tag">vw_market_overview</span>.<br>
+          • <strong>ACID Transactions:</strong> Market data batch ingestion with atomic rollback.
+        </td>
+        <td>
+          • <strong>Trigger:</strong> <span class="tag">trg_on_anomaly_create_alert</span> automatically populating user alert feeds.<br>
+          • <strong>Stored Function:</strong> <span class="tag">fn_match_news_semantic</span> executing cosine similarity queries.<br>
+          • <strong>Indexing Strategy:</strong> Combined B-Tree composite indexes + Vector HNSW.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Queries &amp; DML Operations</strong></td>
+        <td>
+          • Complex queries with 4-way JOINs, GROUP BY sector, and HAVING clauses filtering anomalies.<br>
+          • Correlated subqueries detecting equities moving inversely to their sector benchmark.
+        </td>
+        <td>
+          • DML operations managing watchlist additions, preference toggles, and alert read status updates.<br>
+          • Full-text search and vector similarity ranking queries.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Application &amp; Security</strong></td>
+        <td>
+          • Next.js server connection pooling (<span class="tag">pg.Pool</span>) with resource reuse.<br>
+          • Zero credential hardcoding: strict environment variable isolation (<span class="tag">.env.local</span>).<br>
+          • Interactive stock candlestick &amp; volume charts using Recharts.
+        </td>
+        <td>
+          • Role-Based Access Control (Admin vs. Analyst) protecting sensitive endpoints.<br>
+          • Cryptographic password hashing using bcryptjs.<br>
+          • Real-time alert polling &amp; notification state synchronization in UI.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>7. Recommended Execution Order for the Team</h2>
+  <ol style="font-size: 7.8pt; line-height: 1.4; margin-top: 3px; padding-left: 18px;">
+    <li><strong>Step 1 (Immediate):</strong> Create the initial Git commit for the repository containing the existing <span class="tag">financial_market_schema.sql</span> (authored by Amrit).</li>
+    <li><strong>Step 2 (Day 1–2):</strong> Aman builds and runs <span class="tag">seed_market_data.py</span>; Amrit builds and runs <span class="tag">seed_news_embeddings.py</span> to populate the database with realistic data.</li>
+    <li><strong>Step 3 (Day 3–4):</strong> Implement the advanced SQL scripts (<span class="tag">01_procedures_functions.sql</span>, <span class="tag">02_triggers.sql</span>, <span class="tag">03_views.sql</span>).</li>
+    <li><strong>Step 4 (Day 5–7):</strong> Scaffold the Next.js frontend and build the backend API route handlers.</li>
+    <li><strong>Step 5 (Day 8–10):</strong> Build the UI pages (Dashboard, Charts, Semantic Search, Watchlists, Alerts).</li>
+    <li><strong>Step 6 (Day 11):</strong> Execute evaluation queries, capture application screenshots, and finalize project documentation.</li>
+  </ol>
+
+  <div class="footer-note">
+    — PES University • Department of Computer Science &amp; Engineering • Sem 5 DBMS Experiential Learning —
+  </div>
+
+</body>
+</html>
