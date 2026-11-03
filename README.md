@@ -156,6 +156,20 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
+## 📌 GitHub Issues & Milestone Tracking
+
+| Issue | Subsystem & Deliverable | Assignee | Status | Resolved In |
+| :---: | :--- | :--- | :---: | :--- |
+| **#1** | Market Data Pipeline & Synthetic Crash Seeder | Aman Raj (`@Amanrj305`) | Closed | `0715a7a` (`seed_market_data.py`) |
+| **#2** | Financial News Corpus & 384d Dense Vector Embeddings | Amrit Raj Anmol (`@Ar7-cyber`) | Closed | `28d2ecc` (`seed_news_embeddings.py`) |
+| **#3** | Multi-Indicator Anomaly Detection SP & Analytical Views | Aman Raj (`@Amanrj305`) | Closed | `0654cbe` (`01_procedures_functions.sql`) |
+| **#4** | Vector Search Function & Automated User Alert Trigger | Amrit Raj Anmol (`@Ar7-cyber`) | Closed | `91124a0`, `a1fa8fa` (`02_triggers.sql`) |
+| **#5** | Next.js Analytics Dashboard, APIs & Candlestick Charts | Aman Raj (`@Amanrj305`) | Closed | `a0ac58c` (Next.js Core UI & Charts) |
+| **#6** | Role-based Auth, Semantic Search UI & Watchlist Manager | Amrit Raj Anmol (`@Ar7-cyber`) | Closed | `77a10a9`, `71c70ae`, `cbe5861`, `f7c2586` |
+| **#7** | System Architecture, Data Dictionary & Viva Walkthrough | Aman Raj & Amrit Raj Anmol | Closed | `466883e`, `e43ec0e` (Comprehensive Docs) |
+
+---
+
 ## 🎯 Viva / Examiner Evaluation Checklist
 
 ### Quick Demo Credentials (Pre-seeded)
