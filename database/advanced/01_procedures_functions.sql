@@ -184,3 +184,65 @@ BEGIN
     RETURN QUERY SELECT v_total_detected, v_critical, v_high, v_medium;
 END;
 $$;
+
+-- ------------------------------------------------------------
+-- 2. Semantic Vector Similarity Search Stored Function
+-- Implemented by: Amrit Raj Anmol (PES2UG24CS056)
+-- Demonstrates: pgvector HNSW Cosine Index (<=>), Dense 384d Embeddings,
+-- Sub-millisecond Approximate Nearest Neighbor (ANN) Retrieval,
+-- and Relational Event-Correlation JSON Rollups.
+-- ------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION fn_match_news_semantic(
+    p_query_embedding VECTOR(384),
+    p_threshold NUMERIC DEFAULT 0.20,
+    p_limit INT DEFAULT 10
+)
+RETURNS TABLE (
+    article_id BIGINT,
+    source VARCHAR(150),
+    title VARCHAR(500),
+    article_url VARCHAR(1000),
+    published_at TIMESTAMP,
+    content TEXT,
+    cosine_distance NUMERIC,
+    similarity_score NUMERIC,
+    linked_events JSONB
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        na.article_id,
+        na.source,
+        na.title,
+        na.article_url,
+        na.published_at,
+        na.content,
+        ROUND((na.embedding <=> p_query_embedding)::NUMERIC, 6) AS cosine_distance,
+        ROUND((1 - (na.embedding <=> p_query_embedding))::NUMERIC, 4) AS similarity_score,
+        COALESCE(
+            (
+                SELECT jsonb_agg(
+                    jsonb_build_object(
+                        'event_id', me.event_id,
+                        'title', me.title,
+                        'event_type', me.event_type,
+                        'impact_level', me.impact_level,
+                        'relevance_score', en.relevance_score
+                    )
+                )
+                FROM event_news en
+                JOIN market_event me ON en.event_id = me.event_id
+                WHERE en.article_id = na.article_id
+            ),
+            '[]'::jsonb
+        ) AS linked_events
+    FROM news_article na
+    WHERE (1 - (na.embedding <=> p_query_embedding)) >= p_threshold
+    ORDER BY na.embedding <=> p_query_embedding ASC
+    LIMIT p_limit;
+END;
+$$;
+
